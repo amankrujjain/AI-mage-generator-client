@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
 import { FormField, Loader } from '../components';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const CreatePost = () => {
@@ -44,13 +47,14 @@ const CreatePost = () => {
           const data = await response.json();
           if (response.ok) {
             setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+            toast.success("Awesome! Image is generated")
           } else {
             alert(`Error: ${data.message}`);
           }
         } else {
           const text = await response.text();
           console.error("Response is not JSON:", text);
-          alert("Error: Server response is not in JSON format");
+          toast.error("Error: Server response is not in JSON format");
         }
       } catch (err) {
         alert(`Error: ${err.message}`);
@@ -58,7 +62,7 @@ const CreatePost = () => {
         setGeneratingImg(false);
       }
     } else {
-      alert('Please provide a proper prompt');
+      toast.error('Please provide a proper prompt');
     }
   };
 
@@ -78,7 +82,7 @@ const CreatePost = () => {
 
         const result = await response.json();
         if (response.ok) {
-          alert('Success');
+          toast.success('Your image is shared to the community.');
           navigate('/');
         } else {
           alert(result.message);
@@ -89,7 +93,7 @@ const CreatePost = () => {
         setLoading(false);
       }
     } else {
-      alert('Please generate an image with proper details');
+      toast.error('Please generate an image with proper details');
     }
   };
 
